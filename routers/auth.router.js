@@ -10,5 +10,6 @@ router.post("/register", controller.postRegister); // POST request
 // LOGIN route
 router.get("/login", controller.getLogin); // GET request
 router.post("/login", controller.postLogin); // POST request
+router.post("/logout", controller.logout);
 
 module.exports = router;

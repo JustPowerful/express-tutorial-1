@@ -31,4 +31,28 @@ exports.postRegister = async (req, res) => {
 exports.getLogin = (req, res) => {
   res.render("login");
 };
-exports.postLogin = (req, res) => {};
+exports.postLogin = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.send("Please fill all the fields.");
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.send("Wrong email or password");
+  }
+
+  if (!(await bcrypt.compare(password, user.password))) {
+    return res.send("Wrong email or password");
+  }
+
+  // store session
+  req.session.userId = user._id;
+  res.redirect("/auth/profile");
+};
+
+exports.logout = async (req, res) => {
+  req.session.destroy();
+  res.redirect("/auth/login");
+};
